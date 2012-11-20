@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  ~ This software is produced by SpareBank 1. Unauthorized redistribution,
+  ~ reproduction or usage of this software in whole or in part without the
+  ~ express written consent of SpareBank 1 is strictly prohibited.
+  ~ Copyright © 2012 SpareBank 1
+  ~ ALL RIGHTS RESERVED
+-->
+<configuration>
+  <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+    <encoder>
+      <pattern>%d [%t] %-5p %c - %m%n</pattern>
+    </encoder>
+  </appender>
+  <root level="INFO">
+    <appender-ref ref="CONSOLE"/>
+  </root>
+
+  <logger name="com.exilesoft" level="WARN" />
+
+  <logger name="org.eclipse.jetty" level="WARN" />
+</configuration>
