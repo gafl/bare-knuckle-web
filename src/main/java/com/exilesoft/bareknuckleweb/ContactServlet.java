@@ -35,25 +35,29 @@ public class ContactServlet extends HttpServlet {
         writer.append("<html>");
         writer
         .append("<form method='get'>")
-        .append("<input type='text' name='nameQuery' value='" + (nameQuery != null ? nameQuery : "") + "'>")
-        .append("<input type='submit' name='findContact'>")
+        .append("<input type='text' name='nameQuery' value='" + (nameQuery != null ? nameQuery : "") + "' />")
+        .append("<input type='submit' name='findContact' value='Find contact' />")
         .append("</form>")
         ;
 
+        writer.append("<div id='contacts'>");
         for (Contact contact : contactStorage.find(nameQuery)) {
-            writer.append("<div>" + contact.print() + "</div>");
+            writer.append("<div class='contact'>" + contact.print() + "</div>");
         }
+        writer.append("</div>");
         writer.append("</html>");
     }
 
     private void showCreatePage(PrintWriter writer) {
+        writer.append("<html>");
         writer
             .append("<form method='post'>")
-            .append("<input type='text' name='fullName'>")
-            .append("<input type='text' name='phoneNumber'>")
-            .append("<input type='submit' name='addContact'>")
+            .append("<input type='text' name='fullName' />")
+            .append("<input type='text' name='phoneNumber' />")
+            .append("<input type='submit' name='addContact' value='Add contact' />")
             .append("</form>")
             ;
+        writer.append("</html>");
     }
 
     @Override
