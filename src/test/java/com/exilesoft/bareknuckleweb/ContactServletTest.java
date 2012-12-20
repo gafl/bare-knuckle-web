@@ -36,7 +36,7 @@ public class ContactServletTest {
 
         verify(resp).setContentType("text/html");
 
-        HtmlForm htmlForm = getHtml().getForm();
+        HtmlForm htmlForm = getHtml().getForm("#createForm");
 		assertThat(htmlForm.getSubmitButton().val()).isEqualTo("Add contact");
         assertThat(htmlForm.getFieldNames()).containsExactly("fullName", "phoneNumber", "addContact");
     }
@@ -68,9 +68,9 @@ public class ContactServletTest {
 
         servlet.doGet(req, resp);
 
-        assertThat(getHtml().getForm().getFieldNames())
+        assertThat(getHtml().getForm("#findForm").getFieldNames())
         	.containsOnly("nameQuery", "findContact");
-        assertThat(getHtml().getForm().getSubmitButton().val()).isEqualTo("Find contact");
+        assertThat(getHtml().getForm("#findForm").getSubmitButton().val()).isEqualTo("Find contact");
 
         assertThat(getHtml().findById("contacts").find("...", ".contact").check().texts())
         	.containsExactly("Darth Vader (666)", "Darth Sidious (666)");

@@ -9,9 +9,14 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.eaxy.Element;
+import org.eaxy.html.Xhtml;
+import org.eaxy.html.XhtmlFactory;
+
 public class ContactServlet extends HttpServlet {
     private ContactStorage contactStorage;
     private TransactionManager transactionManager;
+    private final XhtmlFactory xhtmlFactory = new XhtmlFactory(this);
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp)
@@ -31,33 +36,22 @@ public class ContactServlet extends HttpServlet {
         }
     }
 
-    private void showFindPage(PrintWriter writer, String nameQuery) throws SQLException {
-        writer.append("<html>");
-        writer
-        .append("<form method='get'>")
-        .append("<input type='text' name='nameQuery' value='" + (nameQuery != null ? nameQuery : "") + "' />")
-        .append("<input type='submit' name='findContact' value='Find contact' />")
-        .append("</form>")
-        ;
+    private void showFindPage(PrintWriter writer, String nameQuery) throws SQLException, IOException {
+        Xhtml document = xhtmlFactory.create("html/contact/index.html");
 
-        writer.append("<div id='contacts'>");
+        document.getForm("#findForm").set("nameQuery", nameQuery);
+
+        Element contactsEl = document.select("#contacts");
+        Element contactTmpl = contactsEl.take(".contact");
         for (Contact contact : contactStorage.find(nameQuery)) {
-            writer.append("<div class='contact'>" + contact.print() + "</div>");
+            contactsEl.add(contactTmpl.copy().text(contact.print()));
         }
-        writer.append("</div>");
-        writer.append("</html>");
+
+        document.write(writer);
     }
 
-    private void showCreatePage(PrintWriter writer) {
-        writer.append("<html>");
-        writer
-            .append("<form method='post'>")
-            .append("<input type='text' name='fullName' />")
-            .append("<input type='text' name='phoneNumber' />")
-            .append("<input type='submit' name='addContact' value='Add contact' />")
-            .append("</form>")
-            ;
-        writer.append("</html>");
+    private void showCreatePage(PrintWriter writer) throws IOException {
+        xhtmlFactory.create("html/contact/create.html").write(writer);
     }
 
     @Override
