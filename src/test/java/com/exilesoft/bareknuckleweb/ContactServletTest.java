@@ -15,8 +15,8 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.eaxy.Xml;
 import org.eaxy.html.HtmlForm;
+import org.eaxy.html.Xhtml;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Matchers;
@@ -36,7 +36,7 @@ public class ContactServletTest {
 
         verify(resp).setContentType("text/html");
 
-        HtmlForm htmlForm = getHtmlForm();
+        HtmlForm htmlForm = getHtml().getForm();
 		assertThat(htmlForm.getSubmitButton().val()).isEqualTo("Add contact");
         assertThat(htmlForm.getFieldNames()).containsExactly("fullName", "phoneNumber", "addContact");
     }
@@ -68,19 +68,19 @@ public class ContactServletTest {
 
         servlet.doGet(req, resp);
 
-        assertThat(getHtmlForm().getFieldNames())
+        assertThat(getHtml().getForm().getFieldNames())
         	.containsOnly("nameQuery", "findContact");
-        assertThat(getHtmlForm().getSubmitButton().val()).isEqualTo("Find contact");
+        assertThat(getHtml().getForm().getSubmitButton().val()).isEqualTo("Find contact");
 
-        assertThat(Xml.xml(html).find("...", "#contacts", ".contact").check().texts())
+        assertThat(getHtml().findById("contacts").find("...", ".contact").check().texts())
         	.containsExactly("Darth Vader (666)", "Darth Sidious (666)");
 
         verify(storage).find("Darth");
     }
 
-    private HtmlForm getHtmlForm() {
-		return new HtmlForm(Xml.xml(html).select("form"));
-	}
+    private Xhtml getHtml() {
+        return Xhtml.xhtml(html);
+    }
 
 	@Before
     public void setupServlet() throws IOException, SQLException {
