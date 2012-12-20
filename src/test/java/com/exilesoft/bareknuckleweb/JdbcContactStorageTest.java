@@ -1,6 +1,6 @@
 package com.exilesoft.bareknuckleweb;
 
-import static org.fest.assertions.Assertions.assertThat;
+import static org.fest.assertions.api.Assertions.assertThat;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -43,7 +43,7 @@ public class JdbcContactStorageTest {
             storeContacts(matchingContact, nonMatchingContact);
             assertThat(storage.find("darth"))
                 .contains(matchingContact)
-                .excludes(nonMatchingContact);
+                .doesNotContain(nonMatchingContact);
         }
     }
 
@@ -60,7 +60,7 @@ public class JdbcContactStorageTest {
         }
         try (Transaction tx = transactionManager.begin()) {
             assertThat(storage.find(null))
-                .contains(committedContact).excludes(uncommittedContact);
+                .contains(committedContact).doesNotContain(uncommittedContact);
         }
     }
 
