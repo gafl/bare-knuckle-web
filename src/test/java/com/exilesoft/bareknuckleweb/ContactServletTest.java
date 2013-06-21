@@ -15,8 +15,6 @@ import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.eaxy.Xml;
-import org.eaxy.html.HtmlForm;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Matchers;
@@ -36,12 +34,14 @@ public class ContactServletTest {
 
         verify(resp).setContentType("text/html");
 
-        HtmlForm htmlForm = getHtmlForm();
-		assertThat(htmlForm.getSubmitButton().val()).isEqualTo("Add contact");
-        assertThat(htmlForm.getFieldNames()).containsExactly("fullName", "phoneNumber", "addContact");
+        assertThat(html.toString())
+            .contains("<form method='post'")
+            .contains("<input type='text' name='fullName'")
+            .contains("<input type='text' name='phoneNumber'")
+            .contains("<input type='submit' name='addContact'");
     }
 
-	@Test
+    @Test
     public void shouldAddSaveContact() throws Exception {
         String webAppRoot = "/thiscontactweb";
 
@@ -68,21 +68,19 @@ public class ContactServletTest {
 
         servlet.doGet(req, resp);
 
-        assertThat(getHtmlForm().getFieldNames())
-        	.containsOnly("nameQuery", "findContact");
-        assertThat(getHtmlForm().getSubmitButton().val()).isEqualTo("Find contact");
-
-        assertThat(Xml.xml(html).find("...", "#contacts", ".contact").check().texts())
-        	.containsExactly("Darth Vader (666)", "Darth Sidious (666)");
+        assertThat(html.toString())
+            .contains("<form method='get'")
+            .contains("<input type='text' name='nameQuery' value='Darth'")
+            .contains("<input type='submit' name='findContact'")
+            .contains("Darth Vader (666)")
+            .contains("Darth Sidious (666)")
+        ;
 
         verify(storage).find("Darth");
+
     }
 
-    private HtmlForm getHtmlForm() {
-		return new HtmlForm(Xml.xml(html).select("form"));
-	}
-
-	@Before
+    @Before
     public void setupServlet() throws IOException, SQLException {
         servlet.setContactStorage(storage);
         TransactionManager txManager = mock(TransactionManager.class);
