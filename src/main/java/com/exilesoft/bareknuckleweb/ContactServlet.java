@@ -39,7 +39,6 @@ public class ContactServlet extends HttpServlet {
 	        .append("<input type='submit' name='findContact' value='Find contact' />")
 	        .append("</form>")
         ;
-
         writer.append("<ul id='contacts'>");
         for (Contact contact : contactStorage.find(nameQuery)) {
             writer.append("<li class='contact'>" + contact.print() + "</li>");
