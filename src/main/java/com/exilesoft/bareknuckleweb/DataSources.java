@@ -9,6 +9,8 @@ import java.sql.Statement;
 
 import javax.sql.DataSource;
 
+import org.hsqldb.jdbc.JDBCDataSource;
+
 public class DataSources {
 
     private static ThreadLocal<Connection> threadConnection = new ThreadLocal<Connection>();
@@ -54,6 +56,12 @@ public class DataSources {
 
     public static void setDataSource(DataSource dataSource) {
         DataSources.dataSource = dataSource;
+    }
+
+    public static void setHqlDataSource(String jdbcUrl) {
+        JDBCDataSource dataSource = new JDBCDataSource();
+        dataSource.setDatabase(jdbcUrl);
+        setDataSource(dataSource);
     }
 
     public static void executeUpdate(String sql) throws SQLException {

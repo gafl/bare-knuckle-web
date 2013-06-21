@@ -34,17 +34,17 @@ public class ContactServlet extends HttpServlet {
     private void showFindPage(PrintWriter writer, String nameQuery) throws SQLException {
         writer.append("<html>");
         writer
-        .append("<form method='get'>")
-        .append("<input type='text' name='nameQuery' value='" + (nameQuery != null ? nameQuery : "") + "' />")
-        .append("<input type='submit' name='findContact' value='Find contact' />")
-        .append("</form>")
+	        .append("<form method='get'>")
+	        .append("<input type='text' name='nameQuery' value='" + (nameQuery != null ? nameQuery : "") + "' />")
+	        .append("<input type='submit' name='findContact' value='Find contact' />")
+	        .append("</form>")
         ;
 
-        writer.append("<div id='contacts'>");
+        writer.append("<ul id='contacts'>");
         for (Contact contact : contactStorage.find(nameQuery)) {
-            writer.append("<div class='contact'>" + contact.print() + "</div>");
+            writer.append("<li class='contact'>" + contact.print() + "</li>");
         }
-        writer.append("</div>");
+        writer.append("</ul>");
         writer.append("</html>");
     }
 
@@ -52,9 +52,9 @@ public class ContactServlet extends HttpServlet {
         writer.append("<html>");
         writer
             .append("<form method='post'>")
-            .append("<input type='text' name='fullName' />")
-            .append("<input type='text' name='phoneNumber' />")
-            .append("<input type='submit' name='addContact' value='Add contact' />")
+            .append("<li>Full name: <input type='text' name='fullName' /></li>")
+            .append("<li>Phone number: <input type='text' name='phoneNumber' /></li>")
+            .append("<li><input type='submit' name='addContact' value='Add contact' /></li>")
             .append("</form>")
             ;
         writer.append("</html>");

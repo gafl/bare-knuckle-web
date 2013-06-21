@@ -5,7 +5,6 @@ import static org.fest.assertions.api.Assertions.assertThat;
 import java.io.IOException;
 import java.sql.SQLException;
 
-import org.hsqldb.jdbc.JDBCDataSource;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -16,10 +15,7 @@ public class JdbcContactStorageTest {
 
     @BeforeClass
     public static void setupJdbcContactStorage() throws SQLException, IOException {
-        JDBCDataSource dataSource = new JDBCDataSource();
-        dataSource.setDatabase("jdbc:hsqldb:mem:contactStorage");
-        DataSources.setDataSource(dataSource);
-
+        DataSources.setHqlDataSource("jdbc:hsqldb:mem:contactStorage");
         try (Transaction tx = DataSources.begin()) {
             new JdbcContactStorage().createTable();
         }
